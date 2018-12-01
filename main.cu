@@ -30,9 +30,9 @@ int main(int argc, char const *argv[])
   cudaMalloc(&GPU_b , n*0.5 * sizeof(int));
   cudaMalloc(&GPU_A , n * sizeof(int));
 
-  cudaMemset(GPU_x, 1, 1e4 * sizeof(int)); 
-  cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
-  cudaMemset(GPU_A, 1, 1e8 * sizeof(int));
+  cuMemsetD32(GPU_x, 1, 1e4 * sizeof(int)); 
+  cuMemsetD32(GPU_b, 0, 1e4 * sizeof(int));
+  cuMemsetD32(GPU_A, 1, 1e8 * sizeof(int));
 
   kernelA<<<grid_size, block_size>>>(GPU_A, GPU_x, GPU_b, n);
 
