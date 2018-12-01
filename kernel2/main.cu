@@ -4,7 +4,7 @@
 __global__ void kernelA(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   for(int k=0;k<1e4;k++){
-    int tmp A[k*1e4+tId]*x[tId];
+    int tmp = A[k*1e4+tId]*x[tId];
     atomicAdd(&b[k],tmp);
   }
 } 
