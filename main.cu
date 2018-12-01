@@ -50,7 +50,7 @@ int main(int argc, char const *argv[])
   cudaFree(GPU_b);
   cudaFree(GPU_A);
   free(CPU_x);
-  free(CPU_x)
+  free(CPU_x);
 
   return(0);
 }
