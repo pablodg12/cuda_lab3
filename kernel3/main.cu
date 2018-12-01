@@ -5,7 +5,8 @@ __global__ void kernelb(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   for(int k=0; k<1e4;k++){
     b[tId] = b[tId] + A[(int)(tId*1e4+k)]*x[k];
-    if(tId < 2){
+    if(tId < 1){
+      printf("%d\n", k);
       printf("%d\n", b[tId]);
     }
   }
@@ -37,7 +38,7 @@ int main(int argc, char const *argv[])
 
   cudaMemcpy(GPU_A, CPU_A, 1e8 * sizeof(int), cudaMemcpyHostToDevice);
   cudaMemcpy(GPU_x, CPU_x, 1e4 * sizeof(int), cudaMemcpyHostToDevice);
-  cudaMemset(GPU_b,0,1e4 * sizeof(int));
+  cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
 
   kernelb<<<grid_size, block_size>>>(GPU_A, GPU_x, GPU_b, n);
 
