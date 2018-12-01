@@ -3,14 +3,14 @@
 
 __global__ void kernelA(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
-  int mp = tId - 1e4*floor(tId/1e4);
-  A[tId] = A[tId]*x[mp];
-  atomicAdd(&b[mp],A[tId]);
+  for(k=0;k<1e4;k++){
+    atomicAdd(&b[k],A[k*1e4+tId]*x[tId]);
+  }
 } 
 
 int main(int argc, char const *argv[])
 {
-  int n = 1e8;
+  int n = 1e4;
   int block_size = 256;
   int grid_size = (int) ceil((float) n/ block_size);
 
