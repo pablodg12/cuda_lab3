@@ -6,7 +6,7 @@ __global__ void kernelA(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   int mp = tId - 1e4*floor(tId/1e4);
   A[tId] = A[tId]*x[mp];
-  atomicAdd(&b[mp],A[tId]);
+  atomicAdd(b[mp],A[tId]+b[mp]);
 } 
 
 int main(int argc, char const *argv[])
