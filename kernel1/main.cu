@@ -3,7 +3,7 @@
 
 __global__ void kernelA(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
-  if(tId < 1e8){
+  if(tId < N){
     int mp = tId - 1e4*floor(tId/1e4);
     A[tId] = A[tId]*x[mp];
     atomicAdd(&b[mp],A[tId]);

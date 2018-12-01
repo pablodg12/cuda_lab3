@@ -3,9 +3,9 @@
 
 __global__ void kernelb(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
-  if(tId< 1e4){
-    for(int k=0; k < 1e4; k++){
-      b[tId] += A[(int)(tId*1e4+k)]*x[k];
+  if(tId< N){
+    for(int k=0; k < N; k++){
+      b[tId] += A[(int)(tId*N+k)]*x[k];
     }
   }
 } 

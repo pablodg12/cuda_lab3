@@ -2,8 +2,14 @@
 #include <math.h>
 
 __global__ void kernelRed(int *A, int *x, int *b, int N){
-  extern __shared__ int [];
-
+  extern __shared__ int sm[];
+  int tId = threadIdx.x + blockIdx.x * blockDim.x;
+  if(tId < N){
+    for(int k=0; k < N; k++){
+      sm[k] = A[(int)(k*1e4+tId)]*x[tId];
+    }
+  __syncthreads();
+  }
 }
 
 int main(int argc, char const *argv[])
