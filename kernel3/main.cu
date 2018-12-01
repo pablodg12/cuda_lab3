@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <math.h>
 
-__global__ void kernelx(int *A, int *x, int *b, int N){
+__global__ void kernelb(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
-  for(int k=0;k<1e4;k++){
-    atomicAdd(&b[k],A[(int)(k*1e4+tId)]*x[tId]);
+  for(int k=0; k<1e4;k++){
+    atomicAdd(&b[tId],A[(int)(tId*1e4+k)]*x[k]);
   }
 } 
 
@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
   cudaMemcpy(GPU_x, CPU_x, 1e4 * sizeof(int), cudaMemcpyHostToDevice);
   cudaMemset(GPU_b,0,1e4 * sizeof(int));
 
-  kernelx<<<grid_size, block_size>>>(GPU_A, GPU_x, GPU_b, n);
+  kernelb<<<grid_size, block_size>>>(GPU_A, GPU_x, GPU_b, n);
 
   cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
 
