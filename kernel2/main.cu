@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
   int *CPU_x = (int *) malloc(1e4 * sizeof (int));
   int *CPU_A = (int *) malloc(1e8 * sizeof (int));
 
-  for(int k = 0; k < n; k++){
+  for(int k = 0; k < 1e8; k++){
     if(k < 1e4){
       CPU_x[k] = 1;
     }
