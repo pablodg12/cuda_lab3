@@ -3,12 +3,8 @@
 
 __global__ void kernelb(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
-  for(int k=0; k<1e4;k++){
+  for(int k=0; k < 1e4; k++){
     b[tId] = b[tId] + A[(int)(tId*1e4+k)]*x[k];
-    if(tId < 1){
-      printf("%d\n", k);
-      printf("%d\n", b[tId]);
-    }
   }
 } 
 
@@ -25,7 +21,7 @@ int main(int argc, char const *argv[])
   int *CPU_x = (int *) malloc(1e4 * sizeof (int));
   int *CPU_A = (int *) malloc(1e8 * sizeof (int));
 
-  for(int k = 0; k < n; k++){
+  for(int k = 0; k < 1e8; k++){
     if(k < 1e4){
       CPU_x[k] = 1;
     }
