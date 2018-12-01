@@ -5,23 +5,26 @@
 __global__ void kernelA(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   A[tId] = A[tId]*x[tId%1e4];
-  atomicAdd(&b[tId%1e4],A[tId])
-};
+  atomicAdd(&b[tId%1e4],A[tId]);
+} 
 
 int main(int argc, char const *argv[])
 {
-  int *CPU_b; 
   int *GPU_b;
   int *GPU_x;
   int *GPU_A;
+
+  
 
   int n = 1e8;
   int block_size = 256;
   int grid_size = (int) ceil((float) n/ block_size);
 
-  cudaMalloc(&GPU_x , 1e4 * sizeof(int));
-  cudaMalloc(&GPU_b , 1e4 * sizeof(int));
-  cudaMalloc(&GPU_A , 1e8 * sizeof(int));
+  int *CPU_b = (int *) malloc(n*0.5 * sizeof (int));  
+
+  cudaMalloc(&GPU_x , n*0.5 * sizeof(int));
+  cudaMalloc(&GPU_b , n*0.5 * sizeof(int));
+  cudaMalloc(&GPU_A , n * sizeof(int));
 
   cudaMemset(GPU_x, 1, 1e4 * sizeof(int)); 
   cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
