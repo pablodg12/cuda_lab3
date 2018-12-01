@@ -11,8 +11,8 @@ int main(int argc, char const *argv[])
   cudaMalloc(&GPU_x , 1e4* sizeof(int));
   cudaMalloc(&GPU_b , 1e4* sizeof(int));
   cudaMalloc(&GPU_A , 1e8* sizeof(int));
-  cudaMemset(dataGPU, 1, 1e4*sizeof(int));
-  cudaMemset(dataGPU, 1, 1e8*sizeof(int));
+  cudaMemset(GPU_x, 1, 1e4*sizeof(int));
+  cudaMemset(GPU_A, 1, 1e8*sizeof(int));
 
 
   cudaFree(GPU_x);
