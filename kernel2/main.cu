@@ -3,10 +3,13 @@
 
 __global__ void kernelx(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
+  if(tId< 1e4){
   for(int k=0;k<N;k++){
-    atomicAdd(&b[k],2*x[tId]);
-  }
-} 
+    A[(int)(k*1e4+tId)] = A[(int)(k*1e4+tId)]*x[tId];
+    atomicAdd(&b[k],A[(int)(k*1e4+tId)]);
+    }
+  } 
+}
 
 int main(int argc, char const *argv[])
 {
