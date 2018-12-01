@@ -14,35 +14,43 @@ __global__ void kernelA(int *A, int *x, int *b, int N){
 
 int main(int argc, char const *argv[])
 {
-  int *GPU_b;
-  int *GPU_x;
-  int *GPU_A;
-
-  
-
   int n = 1e8;
   int block_size = 256;
   int grid_size = (int) ceil((float) n/ block_size);
 
-  int *CPU_b = (int *) malloc(n*0.5 * sizeof (int));  
+  int *GPU_b;
+  int *GPU_x;
+  int *GPU_A;
+
+  int *CPU_x = (int *) malloc(n*0.5 * sizeof (int));
+  int *CPU_A = (int *) malloc(n * sizeof (int));
+
+  for(int k = 0; k < n; k++){
+    if(k < n){
+      CPU_x[k] = 1;
+    }
+    CPU_A[k] = 1;
+  }  
 
   cudaMalloc(&GPU_x , n*0.5 * sizeof(int));
   cudaMalloc(&GPU_b , n*0.5 * sizeof(int));
   cudaMalloc(&GPU_A , n * sizeof(int));
 
-  cuMemsetD32(GPU_x, 1, 1e4 * sizeof(int)); 
-  cuMemsetD32(GPU_b, 0, 1e4 * sizeof(int));
-  cuMemsetD32(GPU_A, 1, 1e8 * sizeof(int));
+  cudaMemcpy(GPU_A, CPU_A, n * sizeof(int), cudaMemcpyHostToDevice);
+  cudaMemcpy(GPU_x, CPU_x, n*0.5 * sizeof(int), cudaMemcpyHostToDevice);
+  cudaMemset(GPU_b,0,n*0.5 * sizeof(int));
 
   kernelA<<<grid_size, block_size>>>(GPU_A, GPU_x, GPU_b, n);
 
-  cudaMemcpy(CPU_b, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
+  cudaMemcpy(CPU_x, GPU_b, n*0.5 * sizeof(int), cudaMemcpyDeviceToHost);
+
+  printf("%d\n", CPU_x[0]);
 
   cudaFree(GPU_x);
   cudaFree(GPU_b);
   cudaFree(GPU_A);
-
-  printf("%d\n", CPU_b[0]);
+  free(CPU_x);
+  free(CPU_x)
 
   return(0);
 }
