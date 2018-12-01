@@ -4,8 +4,9 @@
 
 __global__ void kernelA(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
-  A[tId] = A[tId]*x[fmod(tId,1e4)];
-  atomicAdd(&b[fmod(tId,1e4)],A[tId]);
+  int mp = tId - 1e4*floor(tId/1e4);
+  A[tId] = A[tId]*x[mp];
+  atomicAdd(&b[mp],A[tId]);
 } 
 
 int main(int argc, char const *argv[])
