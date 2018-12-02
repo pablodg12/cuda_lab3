@@ -15,8 +15,7 @@ __global__ void kernelRed(int *A, int *x, int *b, int N){
       if(threadIdx.x < 8){sm[threadIdx.x] += sm[threadIdx.x+8];__syncthreads();}
       if(threadIdx.x < 4){sm[threadIdx.x] += sm[threadIdx.x+4];__syncthreads();}
       if(threadIdx.x < 2){sm[threadIdx.x] += sm[threadIdx.x+2];__syncthreads();}
-      if(threadIdx.x < 1){sm[threadIdx.x] += sm[threadIdx.x+1];__syncthreads();}
-      if(threadIdx.x < 1){atomicAdd(&b[k],sm[threadIdx.x]);}
+      if(threadIdx.x < 1){sm[threadIdx.x] += sm[threadIdx.x+1];__syncthreads();atomicAdd(&b[k],sm[threadIdx.x]);}
     }
   }
 }
