@@ -5,7 +5,7 @@ __global__ void kernelSM(int *A, int *x, int *b, int N){
   extern __shared__ int sm[];
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   if(tId < N){
-    for(int k = 0; k < blockIdx.x; k++){
+    for(int k = 0; k < N/blockDim.x; k++){
       sm[threadIdx.x] = x[threadIdx.x + 256*k];
       __syncthreads();
       b[tId] += A[(int)(tId*N+(threadIdx.x+256*k))]*sm[threadIdx.x];
