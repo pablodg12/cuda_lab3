@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-__constant__ int buff[1e4];
+__constant__ int buff[10000];
 
 __global__ void kernelCM(int *A, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
   cudaMemcpyToSymbol(buff, CPU_x, 1e4 * sizeof(int), 0, cudaMemcpyHostToDevice);
   cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
 
-  kernelCM<<<grid_size, block_size, block_size*sizeof(int)>>>(GPU_A, GPU_x, GPU_b, n);
+  kernelCM<<<grid_size, block_size, block_size*sizeof(int)>>>(GPU_A, GPU_b, n);
 
   cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
 
