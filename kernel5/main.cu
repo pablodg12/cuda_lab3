@@ -7,15 +7,13 @@ __global__ void kernelSM(int *A, int *x, int *b, int N){
   if(tId < N){
     for(int k = 0; k < N/blockDim.x; k++){
       sm[threadIdx.x] = x[threadIdx.x + 256*k];
-      if(tId==5){
-        printf("Valor de sm %d\n", sm[threadIdx.x]);
-      }
       __syncthreads();
-      b[tId] += A[(int)(tId*N+(threadIdx.x+256*k))]*sm[threadIdx.x];
-      __syncthreads();
+      for(int t = 0; t < 256; t++){
+        b[tId] += A[(int)(tId*N+(t+256*k))]*sm[t];
       }
     }
   }
+}
 
 int main(int argc, char const *argv[])
 {
@@ -50,7 +48,7 @@ int main(int argc, char const *argv[])
   cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
 
   for(int k = 0; k< 1e4; k++){
-    //printf("%d\n", CPU_x[k]);
+    printf("%d\n", CPU_x[k]);
   }
 
   cudaFree(GPU_x);
