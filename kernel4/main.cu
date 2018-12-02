@@ -6,9 +6,17 @@ __global__ void kernelRed(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   if(tId < N){
     for(int k=0; k < N; k++){
-      sm[k] = A[(int)(k*1e4+tId)]*x[tId];
+      sm[tId] = A[(int)(k*1e4+tId)]*x[tId];
+      __syncthreads();
+      if(tId<128){sm[tId] += sm[tId+128];__syncthreads();}
+      if(tId<64){sm[tId] += sm[tId+64];__syncthreads();}
+      if(tId<32){sm[tId] += sm[tId+32];__syncthreads();}
+      if(tId<16){sm[tId] += sm[tId+16];__syncthreads();}
+      if(tId<8){sm[tId] += sm[tId+8];__syncthreads();}
+      if(tId<4){sm[tId] += sm[tId+4];__syncthreads();}
+      if(tId<2){sm[tId] += sm[tId+2];__syncthreads();}
+      if(tId<1){b[tId] = sm[tId];__syncthreads();}
     }
-  __syncthreads();
   }
 }
 
@@ -40,7 +48,7 @@ int main(int argc, char const *argv[])
   cudaMemcpy(GPU_x, CPU_x, 1e4 * sizeof(int), cudaMemcpyHostToDevice);
   cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
 
-  kernelb<<<grid_size, block_size, n*sizeof(int)>>>(GPU_A, GPU_x, GPU_b, n);
+  kernelb<<<grid_size, block_size, block_size*sizeof(int)>>>(GPU_A, GPU_x, GPU_b, n);
 
   cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
 
