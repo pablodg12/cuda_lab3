@@ -5,7 +5,7 @@ __global__ void kernelRed(int *A, int *x, int *b, int N){
   extern __shared__ int sm[];
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   if(tId < N){
-    int mp = tId - 256*floor(tId/256);
+    int mp = tId - blockDim.x*floor(tId/blockDim.x);
     for(int k=0; k < N; k++){
       sm[mp] = A[(int)(k*1e4+tId)]*x[tId];
       __syncthreads();
