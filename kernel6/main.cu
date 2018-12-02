@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-__constant__ int buff[10000];
+__constant__ int buff[1e4];
 
 __global__ void kernelCM(int *A, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
