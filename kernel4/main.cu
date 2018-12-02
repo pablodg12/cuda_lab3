@@ -7,7 +7,7 @@ __global__ void kernelRed(int *A, int *x, int *b, int N){
   if(tId < N){
     int mp = tId - 1e4*floor(tId/1e4);
     for(int k=0; k < N; k++){
-      sm[tId] = A[(int)(k*1e4+tId)]*x[tId];
+      sm[mp] = A[(int)(k*1e4+tId)]*x[tId];
       __syncthreads();
       //if(tId<128){sm[mp] += sm[tId+128];__syncthreads();}
       //if(tId<64){sm[mp] += sm[tId+64];__syncthreads();}
