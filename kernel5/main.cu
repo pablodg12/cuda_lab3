@@ -8,7 +8,7 @@ __global__ void kernelSM(int *A, int *x, int *b, int N){
     for(int k = 0; k < N/blockDim.x; k++){
       sm[threadIdx.x] = x[threadIdx.x + 256*k];
       if(tId==5){
-        printf("El for esta en %d\n", k);
+        printf("Valor de sm %d\n", sm[threadIdx.x]);
       }
       __syncthreads();
       b[tId] += A[(int)(tId*N+(threadIdx.x+256*k))]*sm[threadIdx.x];
