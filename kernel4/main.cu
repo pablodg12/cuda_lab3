@@ -48,7 +48,7 @@ int main(int argc, char const *argv[])
   cudaMemcpy(GPU_x, CPU_x, 1e4 * sizeof(int), cudaMemcpyHostToDevice);
   cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
 
-  kernelb<<<grid_size, block_size, block_size*sizeof(int)>>>(GPU_A, GPU_x, GPU_b, n);
+  kernelRed<<<grid_size, block_size, block_size*sizeof(int)>>>(GPU_A, GPU_x, GPU_b, n);
 
   cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
 
