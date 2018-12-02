@@ -6,10 +6,10 @@ __global__ void kernelSM(int *A, int *x, int *b, int N){
   int tId = threadIdx.x + blockIdx.x * blockDim.x;
   if(tId < N){
     for(int k = 0; k < N/blockDim.x; k++){
+      sm[threadIdx.x] = x[threadIdx.x + 256*k];
       if(tId==5){
         printf("El for esta en %d\n", k);
       }
-      sm[threadIdx.x] = x[threadIdx.x + 256*k];
       __syncthreads();
       b[tId] += A[(int)(tId*N+(threadIdx.x+256*k))]*sm[threadIdx.x];
       __syncthreads();
