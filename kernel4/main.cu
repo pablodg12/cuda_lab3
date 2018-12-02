@@ -15,15 +15,8 @@ __global__ void kernelRed(int *A, int *x, int *b, int N){
       if(threadIdx.x < 8){sm[threadIdx.x] += sm[threadIdx.x+8];__syncthreads();}
       if(threadIdx.x < 4){sm[threadIdx.x] += sm[threadIdx.x+4];__syncthreads();}
       if(threadIdx.x < 2){sm[threadIdx.x] += sm[threadIdx.x+2];__syncthreads();}
-
-      //if(tId<128){sm[mp] += sm[tId+128];__syncthreads();}
-      //if(tId<64){sm[mp] += sm[tId+64];__syncthreads();}
-      //if(tId<32){sm[mp] += sm[tId+32];__syncthreads();}
-      //if(tId<16){sm[mp] += sm[tId+16];__syncthreads();}
-      //if(tId<8){sm[mp] += sm[tId+8];__syncthreads();}
-      //if(tId<4){sm[mp] += sm[tId+4];__syncthreads();}
-      //if(tId<2){sm[mp] += sm[tId+2];__syncthreads();}
-      //if(tId<1){b[tId] = sm[tId];__syncthreads();}
+      if(threadIdx.x < 1){sm[threadIdx.x] += sm[threadIdx.x+1];__syncthreads();}
+      if(threadIdx.x < 1){atomicAdd(&b[k],sm[threadIdx.x]);}
     }
   }
 }
