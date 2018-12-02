@@ -8,6 +8,7 @@ __global__ void kernelRed(int *A, int *x, int *b, int N){
     for(int k=0; k < N; k++){
       sm[threadIdx.x] = A[(int)(k*1e4+tId)]*x[tId];
       __syncthreads();
+      if(threadIdx.x < 128){sm[threadIdx.x] += sm[threadIdx.x+128];__syncthreads();}
       //if(tId<128){sm[mp] += sm[tId+128];__syncthreads();}
       //if(tId<64){sm[mp] += sm[tId+64];__syncthreads();}
       //if(tId<32){sm[mp] += sm[tId+32];__syncthreads();}
