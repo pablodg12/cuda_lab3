@@ -22,29 +22,29 @@ int main(int argc, char const *argv[])
   int *GPU_x;
   int *GPU_A;
 
-  int *CPU_x = (int *) malloc(1e4 * sizeof (int));
-  int *CPU_A = (int *) malloc(1e8 * sizeof (int));
+  int *CPU_x = (int *) malloc(n * sizeof (int));
+  int *CPU_A = (int *) malloc(2*n * sizeof (int));
 
-  for(int k = 0; k < 1e8; k++){
-    if(k < 1e4){
+  for(int k = 0; k < 2*n; k++){
+    if(k < n){
       CPU_x[k] = 1;
     }
     CPU_A[k] = 1;
   }  
 
-  cudaMalloc(&GPU_x , 1e4 * sizeof(int));
-  cudaMalloc(&GPU_b , 1e4 * sizeof(int));
-  cudaMalloc(&GPU_A , 1e8 * sizeof(int));
+  cudaMalloc(&GPU_x , n * sizeof(int));
+  cudaMalloc(&GPU_b , n * sizeof(int));
+  cudaMalloc(&GPU_A , 2*n * sizeof(int));
 
-  cudaMemcpy(GPU_A, CPU_A, 1e8 * sizeof(int), cudaMemcpyHostToDevice);
-  cudaMemcpyToSymbol(buff, CPU_x, 1e4 * sizeof(int), 0, cudaMemcpyHostToDevice);
-  cudaMemset(GPU_b, 0, 1e4 * sizeof(int));
+  cudaMemcpy(GPU_A, CPU_A, 2*n * sizeof(int), cudaMemcpyHostToDevice);
+  cudaMemcpyToSymbol(buff, CPU_x, n * sizeof(int), 0, cudaMemcpyHostToDevice);
+  cudaMemset(GPU_b, 0, n * sizeof(int));
 
   kernelCM<<<grid_size, block_size, block_size*sizeof(int)>>>(GPU_A, GPU_b, n);
 
-  cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
+  cudaMemcpy(CPU_x, GPU_b, n * sizeof(int), cudaMemcpyDeviceToHost);
 
-  //for(int k = 0; k< 1e4; k++){
+  //for(int k = 0; k< n; k++){
   //  printf("%d\n", CPU_x[k]);
   //}
 
