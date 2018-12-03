@@ -15,10 +15,8 @@ __global__ void kernelSM(int *A, int *x, int *b, int N){
       for(int t = 0; t < v_max; t++){
         b_local += A[(int)(tId*N+(t+256*k))]*sm[t];
       }
+      b[tId] += b_local;
     }
-  }
-  if(tId>N){
-    b[tId] += b_local;
   }
 }
 
