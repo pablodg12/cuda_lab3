@@ -52,9 +52,9 @@ int main(int argc, char const *argv[])
 
   cudaMemcpy(CPU_x, GPU_b, 1e4 * sizeof(int), cudaMemcpyDeviceToHost);
 
-  for(int k = 0; k< 1e4; k++){
-    printf("%d\n", CPU_x[k]);
-    }
+  //for(int k = 0; k< 1e4; k++){
+  //  printf("%d\n", CPU_x[k]);
+  //  }
 
   cudaFree(GPU_x);
   cudaFree(GPU_b);
